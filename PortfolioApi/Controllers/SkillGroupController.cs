@@ -9,9 +9,9 @@ namespace PortfolioApi.Controllers
     [Route("[controller]")]
     public class SkillGroupController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<SkillGroupController> _logger;
 
-        public SkillGroupController(ILogger<WeatherForecastController> logger)
+        public SkillGroupController(ILogger<SkillGroupController> logger)
         {
             _logger = logger;
         }
