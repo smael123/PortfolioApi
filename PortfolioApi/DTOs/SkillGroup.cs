@@ -5,7 +5,7 @@ namespace PortfolioApi.DTOs
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public List<Skill> Skills { get; set; } = new List<Skill>();
+        public IEnumerable<Skill> Skills { get; set; } = Enumerable.Empty<Skill>();
         public int Order { get; set; }
     }
 }

@@ -12,8 +12,10 @@
 
   <ItemGroup>
     <None Remove="DTOs\" />
+    <None Remove="JsonConverters\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTOs\" />
+    <Folder Include="JsonConverters\" />
   </ItemGroup>
 </Project>

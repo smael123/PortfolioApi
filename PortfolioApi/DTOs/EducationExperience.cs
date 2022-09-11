@@ -9,7 +9,7 @@ namespace PortfolioApi.DTOs
         public int YearOfGraduation { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
-        public List<EducationCourse> EducationCourses { get; set; } = new List<EducationCourse>();
+        public IEnumerable<EducationCourse> EducationCourses { get; set; } = Enumerable.Empty<EducationCourse>();
     }
 }
 
