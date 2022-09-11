@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 using PortfolioApi.DTOs;
 
 namespace PortfolioApi
@@ -136,6 +137,40 @@ namespace PortfolioApi
             };
 
             return skillGroups;
+        }
+
+        public static List<EducationExperience> GetEducationExperiences()
+        {
+            return new List<EducationExperience>()
+            {
+                new()
+                {
+                    Id = 1,
+                    SchoolName = "University of Houston-Downtown",
+                    Degree = "Bachelor of Science in Computer Science",
+                    YearOfGraduation = 2017,
+                    EducationCourses = new() {
+                        new() {
+                            Name = "Software Engineering",
+                            Order = 1
+                        },
+                        new() {
+                            Name = "Data Structures and Algorithms",
+                            Order = 2
+                        },
+                        new() {
+                            Name = "Object Oriented Programming",
+                            Order = 3
+                        },
+                        new() {
+                            Name = "Database and Warehouses",
+                            Order = 4
+                        }
+                    },
+                    City = "Houston",
+                    State = "TX"
+                }
+            };
         }
     }
 }
