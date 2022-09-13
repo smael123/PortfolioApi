@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+
 namespace PortfolioApi.DTOs
 {
     public class EducationExperience
@@ -9,6 +11,7 @@ namespace PortfolioApi.DTOs
         public int YearOfGraduation { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
+        [JsonPropertyName("courses")]
         public IEnumerable<EducationCourse> EducationCourses { get; set; } = Enumerable.Empty<EducationCourse>();
     }
 }

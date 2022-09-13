@@ -17,14 +17,14 @@ namespace PortfolioApi.Controllers
         }
 
         [HttpGet]
-        [Route("Project/Work", Name = "GetWorkProjects")]
+        [Route("Work", Name = "GetWorkProjects")]
         public IEnumerable<Project> GetWorkProjects()
         {
             return PortfolioHardcodedRepo.GetWorkProjects();
         }
 
         [HttpGet]
-        [Route("Project/Personal", Name = "GetPersonalProjects")]
+        [Route("Personal", Name = "GetPersonalProjects")]
         public IEnumerable<Project> GetPersonalProjects()
         {
             return PortfolioHardcodedRepo.GetPersonalProjects();

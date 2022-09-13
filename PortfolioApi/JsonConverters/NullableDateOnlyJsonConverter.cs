@@ -26,7 +26,7 @@ namespace PortfolioApi.JsonConverters
 
             if (value.HasValue)
             {
-                str = value.Value.ToString("yyyy-MM-dd");
+                str = value.Value.ToString("yyyy-MM-dd\"T00:00:00\"");
             }
 
             writer.WriteStringValue(str);

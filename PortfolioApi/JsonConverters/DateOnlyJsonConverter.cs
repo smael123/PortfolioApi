@@ -22,7 +22,7 @@ namespace PortfolioApi.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
         {
-            string str = value.ToString("yyyy-MM-dd");
+            string str = value.ToString("yyyy-MM-dd\"T00:00:00\"");
 
             writer.WriteStringValue(str);
         }
