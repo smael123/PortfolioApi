@@ -15,16 +15,20 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseSwagger();
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
             app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();
 
-        app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
+        }
 
         app.UseAuthorization();
 
