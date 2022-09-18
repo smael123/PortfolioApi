@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PortfolioApi.DTOs;
 using System.Xml.Linq;
+using PortfolioApi.Persistence;
 
 namespace PortfolioApi.Controllers
 {
@@ -10,16 +11,34 @@ namespace PortfolioApi.Controllers
     public class PersonProfileController : ControllerBase
     {
         private readonly ILogger<PersonProfileController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PersonProfileController(ILogger<PersonProfileController> logger)
+        public PersonProfileController(ILogger<PersonProfileController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet(Name = "GetPersonProfile")]
-        public PortfolioPersonProfile? Get()
+        public async Task<ActionResult<PortfolioPersonProfile>> Get(string ownerId)
         {
-            return PortfolioHardcodedRepo.GetPortfolioPersonProfile();
+            try
+            {
+                PortfolioPersonProfile? personProflie = await _unitOfWork.PersonProfiles.GetNewestByOwner(ownerId);
+
+                if (personProflie is null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(personProflie);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ownerId: {ownerId}", ownerId);
+
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PortfolioApi.DTOs;
 using System.Xml.Linq;
+using PortfolioApi.Persistence;
 
 namespace PortfolioApi.Controllers
 {
@@ -10,24 +11,31 @@ namespace PortfolioApi.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly ILogger<ProjectController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ProjectController(ILogger<ProjectController> logger)
+        public ProjectController(ILogger<ProjectController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
-        [HttpGet]
-        [Route("Work", Name = "GetWorkProjects")]
-        public IEnumerable<Project> GetWorkProjects()
+        //is IEnumerable fine?
+        [HttpGet(Name = "GetProjects")]
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjects(string ownerId, string projectType)
         {
-            return PortfolioHardcodedRepo.GetWorkProjects();
-        }
+            try
+            {
+                List<Project> projects = await _unitOfWork.Projects.GetProjectsByOwnerAndType(ownerId, projectType);
 
-        [HttpGet]
-        [Route("Personal", Name = "GetPersonalProjects")]
-        public IEnumerable<Project> GetPersonalProjects()
-        {
-            return PortfolioHardcodedRepo.GetPersonalProjects();
+                return projects;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ownerId: {ownerId} | projectType: {projectType}", ownerId, projectType);
+
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc;
 using PortfolioApi.DTOs;
+using PortfolioApi.Persistence;
 
 namespace PortfolioApi.Controllers
 {
@@ -10,16 +11,29 @@ namespace PortfolioApi.Controllers
     public class SkillGroupController : ControllerBase
     {
         private readonly ILogger<SkillGroupController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public SkillGroupController(ILogger<SkillGroupController> logger)
+        public SkillGroupController(ILogger<SkillGroupController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet(Name = "GetSkillGroups")]
-        public IEnumerable<SkillGroup> Get()
+        public async Task<ActionResult<IEnumerable<SkillGroup>>> Get(string ownerId)
         {
-            return PortfolioHardcodedRepo.GetSkillGroups();
+            try
+            {
+                List<SkillGroup> skillGroups = await _unitOfWork.SkillGroups.GetByOwner(ownerId);
+
+                return skillGroups;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ownerId: {ownerId}", ownerId);
+
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            } 
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PortfolioApi.DTOs;
 using System.Xml.Linq;
+using PortfolioApi.Persistence;
 
 namespace PortfolioApi.Controllers
 {
@@ -10,16 +11,29 @@ namespace PortfolioApi.Controllers
     public class WorkExperienceController : ControllerBase
     {
         private readonly ILogger<WorkExperienceController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public WorkExperienceController(ILogger<WorkExperienceController> logger)
+        public WorkExperienceController(ILogger<WorkExperienceController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet(Name = "GetWorkExperiences")]
-        public IEnumerable<WorkExperience> Get()
+        public async Task<ActionResult<IEnumerable<WorkExperience>>> Get(string ownerId)
         {
-            return PortfolioHardcodedRepo.GetWorkExperiences();
+            try
+            {
+                List<WorkExperience> workExperiences = await _unitOfWork.WorkExperiences.GetByOwner(ownerId);
+
+                return workExperiences;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ownerId: {ownerId}", ownerId);
+
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

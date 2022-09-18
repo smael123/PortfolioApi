@@ -4,7 +4,7 @@ using PortfolioApi.JsonConverters;
 
 namespace PortfolioApi.DTOs
 {
-    public class WorkExperience
+    public class WorkExperience : IOwnedItem
     {
         public int Id { get; set; }
         public string? CompanyName { get; set; }
@@ -19,6 +19,7 @@ namespace PortfolioApi.DTOs
         public string? Title { get; set; }
         [JsonPropertyName("responsibilities")]
         public IEnumerable<WorkResponsibility> WorkResponsibilities { get; set; } = Enumerable.Empty<WorkResponsibility>();
+        public string? OwnerId { get; set; }
     }
 }
 
