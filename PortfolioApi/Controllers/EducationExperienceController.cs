@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PortfolioApi.DTOs;
 using System.Xml.Linq;
 using PortfolioApi.Persistence;
+using AutoMapper;
 
 namespace PortfolioApi.Controllers
 {
@@ -12,21 +13,23 @@ namespace PortfolioApi.Controllers
     {
         private readonly ILogger<EducationExperienceController> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public EducationExperienceController(ILogger<EducationExperienceController> logger, IUnitOfWork unitOfWork)
+        public EducationExperienceController(ILogger<EducationExperienceController> logger, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpGet(Name = "GetEducationExperiences")]
-        public async Task<ActionResult<IEnumerable<EducationExperience>>> Get(string ownerId)
+        public async Task<ActionResult<IEnumerable<EducationExperienceDTO>>> Get(string ownerId)
         {
             try
             {
-                List<EducationExperience> educationExperiences = await _unitOfWork.EducationExperiences.GetByOwner(ownerId);
+                List<EducationExperienceDTO> educationExperienceDTOs = _mapper.Map<List<EducationExperienceDTO>>(await _unitOfWork.EducationExperiences.GetByOwner(ownerId));
 
-                return educationExperiences;
+                return educationExperienceDTOs;
             }
             catch (Exception ex)
             {

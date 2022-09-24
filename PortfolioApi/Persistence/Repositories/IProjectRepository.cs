@@ -1,4 +1,4 @@
-﻿using PortfolioApi.DTOs;
+﻿using PortfolioApi.Models;
 
 namespace PortfolioApi.Persistence.Repositories
 {

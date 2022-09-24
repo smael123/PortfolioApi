@@ -1,5 +1,5 @@
 ﻿using System;
-using PortfolioApi.DTOs;
+using PortfolioApi.Models;
 using PortfolioApi.Persistence.Repositories;
 
 namespace PortfolioApi.Persistence
@@ -15,9 +15,9 @@ namespace PortfolioApi.Persistence
         public UnitOfWork()
         {
             //get from env
-            string accountEndpoint = "a";
-            string authKeyOrResourceToken = "b";
-            string databaseId = "c";
+            string accountEndpoint = "x";
+            string authKeyOrResourceToken = "y";
+            string databaseId = "z";
 
             CosmosConfig cosmosConfig = new(accountEndpoint, authKeyOrResourceToken, databaseId);
 

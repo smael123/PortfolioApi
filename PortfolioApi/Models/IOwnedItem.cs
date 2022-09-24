@@ -1,5 +1,5 @@
 ﻿using System;
-namespace PortfolioApi.DTOs
+namespace PortfolioApi.Models
 {
     public interface IOwnedItem
     {

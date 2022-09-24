@@ -1,4 +1,5 @@
-﻿using PortfolioApi.Persistence;
+﻿using AutoMapper;
+using PortfolioApi.Persistence;
 
 namespace PortfolioApi;
 
@@ -16,6 +17,8 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        builder.Services.AddAutoMapper(typeof(DefaultAutoMapperProfile));
 
         var app = builder.Build();
 

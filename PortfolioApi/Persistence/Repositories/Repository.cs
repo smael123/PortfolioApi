@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using Microsoft.Azure.Cosmos;
-using PortfolioApi.DTOs;
+using PortfolioApi.Models;
 
 namespace PortfolioApi.Persistence.Repositories
 {
@@ -19,18 +20,24 @@ namespace PortfolioApi.Persistence.Repositories
 
         public async Task<List<T>> GetByOwner(string ownerId)
         {
+            //CosmosClientOptions options = new()
+            //{
+            //    Serializer = new CosmosJsonDotNetPortfolioApiSerializer(new CosmosSerializationOptions())
+            //};
+
             using CosmosClient client = new(
                 accountEndpoint: _cosmosConfig.AccountEndpoint,
-                authKeyOrResourceToken: _cosmosConfig.AuthKeyOrResourceToken
+                authKeyOrResourceToken: _cosmosConfig.AuthKeyOrResourceToken//,
+               //options
             );
 
             Database database = client.GetDatabase(_cosmosConfig.DatabaseId);
             Container container = database.GetContainer(_containerName);
 
-            string query = $"SELECT * FROM {_containerName} c where c.ownerId = @key";
+            const string query = "SELECT * FROM c where c.ownerId = @ownerId";
 
-            QueryDefinition queryDefinition = new(query);
-            queryDefinition.WithParameter("@key", ownerId);
+            QueryDefinition queryDefinition = new QueryDefinition(query)
+                .WithParameter("@ownerId", ownerId);
 
             using FeedIterator<T> feed = container.GetItemQueryIterator<T>(queryDefinition);
 

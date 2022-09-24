@@ -1,9 +1,10 @@
 ﻿using System;
+
 namespace PortfolioApi.DTOs
 {
-    public class WorkResponsibility
+    public class EducationCourseDTO
     {
-        public string? Description { get; set; }
+        public string? Name { get; set; }
         public int Order { get; set; }
     }
 }

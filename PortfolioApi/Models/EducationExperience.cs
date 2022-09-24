@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
-namespace PortfolioApi.DTOs
+namespace PortfolioApi.Models
 {
     public class EducationExperience : IOwnedItem
     {
-        public int Id { get; set; }
+        public string? Id { get; set; }
         public string? SchoolName { get; set; }
         public string? Degree { get; set; }
         public int YearOfGraduation { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
-        [JsonPropertyName("courses")]
-        public IEnumerable<EducationCourse> EducationCourses { get; set; } = Enumerable.Empty<EducationCourse>();
+        public ICollection<EducationCourse> EducationCourses { get; set; } = new Collection<EducationCourse>();
         public string? OwnerId { get; set ; }
     }
 }

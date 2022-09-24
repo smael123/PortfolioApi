@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text.Json.Serialization;
-using PortfolioApi.JsonConverters;
+using PortfolioApi.SystemJsonConverters;
 
 namespace PortfolioApi.DTOs
 {
-    public class WorkExperience : IOwnedItem
+    public class WorkExperienceDTO
     {
-        public int Id { get; set; }
+        public string? Id { get; set; }
         public string? CompanyName { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
@@ -18,7 +18,7 @@ namespace PortfolioApi.DTOs
         public DateOnly? EndDate { get; set; }
         public string? Title { get; set; }
         [JsonPropertyName("responsibilities")]
-        public IEnumerable<WorkResponsibility> WorkResponsibilities { get; set; } = Enumerable.Empty<WorkResponsibility>();
+        public IEnumerable<WorkResponsibilityDTO> WorkResponsibilities { get; set; } = Enumerable.Empty<WorkResponsibilityDTO>();
         public string? OwnerId { get; set; }
     }
 }

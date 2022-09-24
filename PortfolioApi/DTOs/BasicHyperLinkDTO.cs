@@ -1,7 +1,8 @@
 ﻿using System;
+
 namespace PortfolioApi.DTOs
 {
-    public class BasicHyperLink
+    public class BasicHyperLinkDTO
     {
         public string? Href { get; set; }
         public string? DisplayText { get; set; }

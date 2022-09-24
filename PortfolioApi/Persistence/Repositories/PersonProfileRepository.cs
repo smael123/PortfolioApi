@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using Microsoft.Azure.Cosmos;
-using PortfolioApi.DTOs;
+using PortfolioApi.Models;
 
 namespace PortfolioApi.Persistence.Repositories
 {
@@ -19,10 +20,10 @@ namespace PortfolioApi.Persistence.Repositories
             Container container = database.GetContainer(_containerName);
 
             //select newest one
-            string query = $"SELECT * FROM {_containerName} pp where pp.ownerId = @key order by ee.createdDateTime DESC LIMIT 1";
+            const string query = "SELECT * FROM pp where pp.ownerId = @ownerId order by pp.createdDateTime DESC OFFSET 0 LIMIT 1";
 
-            QueryDefinition queryDefinition = new(query);
-            queryDefinition.WithParameter("@key", ownerId);
+            QueryDefinition queryDefinition = new QueryDefinition(query)
+                .WithParameter("@ownerId", ownerId);
 
             using FeedIterator<PortfolioPersonProfile> feed = container.GetItemQueryIterator<PortfolioPersonProfile>(queryDefinition);
 

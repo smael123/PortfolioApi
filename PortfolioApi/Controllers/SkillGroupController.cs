@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PortfolioApi.DTOs;
 using PortfolioApi.Persistence;
@@ -12,21 +13,23 @@ namespace PortfolioApi.Controllers
     {
         private readonly ILogger<SkillGroupController> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public SkillGroupController(ILogger<SkillGroupController> logger, IUnitOfWork unitOfWork)
+        public SkillGroupController(ILogger<SkillGroupController> logger, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpGet(Name = "GetSkillGroups")]
-        public async Task<ActionResult<IEnumerable<SkillGroup>>> Get(string ownerId)
+        public async Task<ActionResult<IEnumerable<SkillGroupDTO>>> Get(string ownerId)
         {
             try
             {
-                List<SkillGroup> skillGroups = await _unitOfWork.SkillGroups.GetByOwner(ownerId);
+                List<SkillGroupDTO> skillGroupDTOs = _mapper.Map<List<SkillGroupDTO>>(await _unitOfWork.SkillGroups.GetByOwner(ownerId));
 
-                return skillGroups;
+                return skillGroupDTOs;
             }
             catch (Exception ex)
             {

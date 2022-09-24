@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PortfolioApi.JsonConverters
+namespace PortfolioApi.SystemJsonConverters
 {
     public class NullableDateOnlyJsonConverter : JsonConverter<DateOnly?>
     {
@@ -15,21 +15,19 @@ namespace PortfolioApi.JsonConverters
                 return null;
             }
 
-            DateTime dateTime = JsonSerializer.Deserialize<DateTime>(str);
-
-            return DateOnly.FromDateTime(dateTime);
+            return DateOnlyJsonConverterCommonLogic.NonNullRead(str);
         }
 
         public override void Write(Utf8JsonWriter writer, DateOnly? value, JsonSerializerOptions options)
         {
-            string? str = null;
-
-            if (value.HasValue)
+            if (!value.HasValue)
             {
-                str = value.Value.ToString("yyyy-MM-dd\"T00:00:00\"");
+                writer.WriteStringValue((string?)null);
             }
-
-            writer.WriteStringValue(str);
+            else
+            {
+                DateOnlyJsonConverterCommonLogic.NonNullWrite(writer, value.Value);
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
-namespace PortfolioApi.DTOs
+namespace PortfolioApi.Models
 {
-    public class EducationCourse
+    public class Skill
     {
         public string? Name { get; set; }
         public int Order { get; set; }

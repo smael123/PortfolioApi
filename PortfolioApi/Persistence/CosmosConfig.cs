@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace PortfolioApi.Persistence
 {
     public class CosmosConfig
