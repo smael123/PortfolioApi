@@ -12,15 +12,8 @@ namespace PortfolioApi.Persistence
         public IProjectRepository Projects { get; init; }
         public IPersonProfileRepository PersonProfiles { get; init; }
 
-        public UnitOfWork()
+        public UnitOfWork(CosmosConfig cosmosConfig)
         {
-            //get from env
-            string accountEndpoint = "x";
-            string authKeyOrResourceToken = "y";
-            string databaseId = "z";
-
-            CosmosConfig cosmosConfig = new(accountEndpoint, authKeyOrResourceToken, databaseId);
-
             EducationExperiences = new Repository<EducationExperience>(cosmosConfig, "education-experiences");
             WorkExperiences = new Repository<WorkExperience>(cosmosConfig, "work-experiences");
             SkillGroups = new Repository<SkillGroup>(cosmosConfig, "skill-groups");
