@@ -43,6 +43,8 @@ public class Program
 
         builder.Services.AddAutoMapper(typeof(DefaultAutoMapperProfile));
 
+        builder.Services.AddResponseCaching();
+
         var app = builder.Build();
 
         app.UseSwagger();
@@ -60,8 +62,25 @@ public class Program
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
         }
 
-        app.UseAuthorization();
+        app.UseResponseCaching();
 
+        //automatically add the cache headers to anonymous authorization GET 200 responses
+        app.Use(async (context, next) =>
+        {
+            context.Response.GetTypedHeaders().CacheControl =
+                new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                {
+                    Public = true,
+                    MaxAge = TimeSpan.FromDays(1) //browser will recache every day
+                };
+
+            context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                new string[] { "Accept-Encoding" };
+
+            await next();
+        });
+
+        app.UseAuthorization();
 
         app.MapControllers();
 
