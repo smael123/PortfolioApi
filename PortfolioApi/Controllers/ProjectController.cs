@@ -34,7 +34,7 @@ namespace PortfolioApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "ownerId: {ownerId} | projectType: {projectType}", ownerId, projectType);
+                _logger.LogError(ex, $"{nameof(ownerId)}: {{ownerId}} | ${nameof(projectType)}: {{projectType}}", ownerId, projectType);
 
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }

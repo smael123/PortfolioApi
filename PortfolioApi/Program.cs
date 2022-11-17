@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging.AzureAppServices;
 using PortfolioApi.Persistence;
 
 namespace PortfolioApi;
@@ -11,16 +12,9 @@ public class Program
 
         CosmosConfig cosmosConfig;
 
-        if (builder.Environment.EnvironmentName == "Development")
+        if (builder.Environment.EnvironmentName == "Production")
         {
-            cosmosConfig = new(
-                builder.Configuration["Cosmos:Endpoint"],
-                builder.Configuration["Cosmos:AuthKey"],
-                builder.Configuration["Cosmos:DatabaseId"]
-            );
-        }
-        else
-        {
+            //get cosmos configuration from App Service Environment variables
             string? endpoint = Environment.GetEnvironmentVariable("PORTFOLIO_COSMOS_ENDPOINT");
             string? authKey = Environment.GetEnvironmentVariable("PORTFOLIO_COSMOS_KEY");
             string? databaseId = Environment.GetEnvironmentVariable("PORTFOLIO_COSMOS_DB");
@@ -29,6 +23,27 @@ public class Program
                 endpoint,
                 authKey,
                 databaseId
+            );
+
+            //set up logging
+            builder.Logging.AddAzureWebAppDiagnostics();
+            builder.Services.Configure<AzureFileLoggerOptions>(options =>
+            {
+                options.FileName = "azure-diagnostics-";
+                options.FileSizeLimit = 50 * 1024; //5MB
+                options.RetainedFileCountLimit = 5;
+            });
+            builder.Services.Configure<AzureBlobLoggerOptions>(options =>
+            {
+                options.BlobName = "log.txt";
+            });
+        }
+        else
+        {
+            cosmosConfig = new(
+                builder.Configuration["Cosmos:Endpoint"],
+                builder.Configuration["Cosmos:AuthKey"],
+                builder.Configuration["Cosmos:DatabaseId"]
             );
         }
 
@@ -62,9 +77,8 @@ public class Program
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
         }
 
-        app.UseResponseCaching();
-
         //automatically add the cache headers to anonymous authorization GET 200 responses
+        app.UseResponseCaching();
         app.Use(async (context, next) =>
         {
             context.Response.GetTypedHeaders().CacheControl =
@@ -80,7 +94,7 @@ public class Program
             await next();
         });
 
-        app.UseAuthorization();
+        //app.UseAuthorization();
 
         app.MapControllers();
 
